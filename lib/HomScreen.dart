@@ -1,4 +1,7 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:shopping_cart/Constants/Constants.dart';
+import 'package:shopping_cart/Widget/ShoesContainer.dart';
 
 class HomScreen extends StatefulWidget {
   const HomScreen({Key? key}) : super(key: key);
@@ -57,65 +60,156 @@ class _HomScreenState extends State<HomScreen> {
           ),
         ],
       ),
-      body: Container(
-        child: Column(
-          children: [
-            Container(
-              height: 90,
-              color: Colors.transparent,
-              child: ListView.builder(
-                shrinkWrap: true,
-                scrollDirection: Axis.horizontal,
-                itemCount: group.length,
-                itemBuilder: (BuildContext context, int index) {
-                  return GestureDetector(
-                    onTap: () {
-                      setState(() {
-                        selectedIndex = index;
-                      });
-                    },
-                    child: Container(
-                      child: Padding(
-                        padding:
-                            EdgeInsets.symmetric(horizontal: 10, vertical: 0),
-                        child: Column(
-                          children: [
-                            Container(
-                              width: 60,
-                              height: 60,
-                              padding: EdgeInsets.all(10),
-                              decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                                color: selectedIndex == index
-                                    ? Colors.orange
-                                    : Colors.grey.shade100,
-                                image: DecorationImage(
-                                  image: NetworkImage(group[index]['logo']),
+      body: SingleChildScrollView(
+        physics: BouncingScrollPhysics(
+          parent: AlwaysScrollableScrollPhysics(),
+        ),
+        child: Container(
+          child: Column(
+            children: [
+              Container(
+                height: 110,
+                color: Colors.transparent,
+                child: ListView.builder(
+                  shrinkWrap: true,
+                  scrollDirection: Axis.horizontal,
+                  itemCount: group.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    return GestureDetector(
+                      onTap: () {
+                        setState(() {
+                          selectedIndex = index;
+                        });
+                      },
+                      child: Container(
+                        child: Padding(
+                          padding:
+                              EdgeInsets.symmetric(horizontal: 10, vertical: 0),
+                          child: Column(
+                            children: [
+                              Container(
+                                width: 60,
+                                height: 60,
+                                padding: EdgeInsets.all(10),
+                                decoration: BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  color: selectedIndex == index
+                                      ? Colors.orange
+                                      : Colors.grey.shade100,
+                                  image: DecorationImage(
+                                    image: NetworkImage(
+                                      group[index]['logo'],
+                                    ),
+                                  ),
                                 ),
                               ),
-                            ),
-                            SizedBox(height: 5),
-                            Text(
-                              group[index]['brand'],
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
+                              SizedBox(height: 5),
+                              Text(
+                                group[index]['brand'],
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                ),
                               ),
-                            ),
-                          ],
+                              SizedBox(height: 20),
+                            ],
+                          ),
                         ),
                       ),
-                    ),
-                  );
-                },
+                    );
+                  },
+                ),
               ),
-            ),
-            Container(
-              height: 30,
-              color: Colors.green,
-            ),
-          ],
+              buildShoesWidget(),
+            ],
+          ),
         ),
       ),
     );
+  }
+
+  Widget buildShoesWidget() {
+    switch (selectedIndex) {
+      case 0:
+        return Padding(
+          padding: EdgeInsets.symmetric(horizontal: 10),
+          child: StreamBuilder<QuerySnapshot>(
+            stream: nikeRef.snapshots(),
+            builder:
+                (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+              if (!snapshot.hasData) {
+                return Center(
+                  child: CircularProgressIndicator(),
+                );
+              }
+              List<DocumentSnapshot> nikeShoes = snapshot.data!.docs;
+              return ShoesContainer(listShoes: nikeShoes, context: context);
+            },
+          ),
+        );
+        break;
+      case 1:
+        return Padding(
+          padding: EdgeInsets.symmetric(horizontal: 10),
+          child: StreamBuilder<QuerySnapshot>(
+            stream: adidasRef.snapshots(),
+            builder:
+                (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+              if (!snapshot.hasData) {
+                return Center(
+                  child: CircularProgressIndicator(),
+                );
+              }
+              List<DocumentSnapshot> adidasShoes = snapshot.data!.docs;
+              return ShoesContainer(listShoes: adidasShoes, context: context);
+            },
+          ),
+        );
+        break;
+      case 2:
+        return Padding(
+          padding: EdgeInsets.symmetric(horizontal: 10),
+          child: StreamBuilder<QuerySnapshot>(
+            stream: pumaRef.snapshots(),
+            builder:
+                (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+              if (!snapshot.hasData) {
+                return Center(
+                  child: CircularProgressIndicator(),
+                );
+              }
+              List<DocumentSnapshot> pumaShoes = snapshot.data!.docs;
+              return ShoesContainer(listShoes: pumaShoes, context: context);
+            },
+          ),
+        );
+        break;
+      case 3:
+        return Padding(
+          padding: EdgeInsets.symmetric(horizontal: 10),
+          child: StreamBuilder<QuerySnapshot>(
+            stream: newBalanceRef.snapshots(),
+            builder:
+                (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+              if (!snapshot.hasData) {
+                return Center(
+                  child: CircularProgressIndicator(),
+                );
+              }
+              List<DocumentSnapshot> newBalanceShoes = snapshot.data!.docs;
+              return ShoesContainer(
+                  listShoes: newBalanceShoes, context: context);
+            },
+          ),
+        );
+        break;
+      default:
+        return Center(
+          child: Text(
+            'user profile tweets wrong',
+            style: TextStyle(fontSize: 25),
+          ),
+        );
+        break;
+    }
   }
 }
