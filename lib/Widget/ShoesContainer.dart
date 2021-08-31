@@ -1,14 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:shopping_cart/Model/Shoes.dart';
 
 class ShoesContainer extends StatefulWidget {
   final List<DocumentSnapshot> listShoes;
-  final BuildContext context;
   ShoesContainer({
     Key? key,
     required this.listShoes,
-    required this.context,
   }) : super(key: key);
 
   @override
@@ -16,11 +13,13 @@ class ShoesContainer extends StatefulWidget {
 }
 
 class _ShoesContainerState extends State<ShoesContainer> {
+  final List shoesCartList = []; /*カートに入れた商品リスト*/
+
   @override
   Widget build(BuildContext context) {
     // // アスペクト比を計算する
     var size = MediaQuery.of(context).size;
-    final double itemHeight = (size.height - kToolbarHeight - 190) / 2;
+    final double itemHeight = (size.height - kToolbarHeight - 300) / 2;
     final double itemWidth = size.width / 2;
 
     return GridView.count(
@@ -31,7 +30,8 @@ class _ShoesContainerState extends State<ShoesContainer> {
       crossAxisSpacing: 8,
       childAspectRatio: (itemWidth / itemHeight),
       children: widget.listShoes.map((shoesSnap) {
-        Shoes shoes = Shoes.fromDoc(shoesSnap);
+        //final alreadyBuy = shoesCartList.contains(shoesSnap.data());
+
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -40,19 +40,19 @@ class _ShoesContainerState extends State<ShoesContainer> {
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(19),
                 image: DecorationImage(
-                  image: NetworkImage(shoes.image),
+                  image: NetworkImage(shoesSnap['image']),
                   fit: BoxFit.cover,
                 ),
               ),
             ),
             Text(
-              shoes.name,
+              shoesSnap['name'],
               style: TextStyle(
                 fontWeight: FontWeight.bold,
               ),
             ),
             Text(
-              shoes.gender,
+              shoesSnap['gender'],
               style: TextStyle(
                 fontSize: 13,
                 color: Colors.grey,
@@ -61,13 +61,21 @@ class _ShoesContainerState extends State<ShoesContainer> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text('¥ ${shoes.price}'),
+                Text('¥ ${shoesSnap['price']}'),
                 IconButton(
-                  icon: Icon(
-                    Icons.shopping_cart_outlined,
-                    color: Colors.orange,
-                  ),
-                  onPressed: () {},
+                  icon: Icon(Icons.shopping_cart_outlined),
+                  color: Colors.orange,
+                  onPressed: () {
+                    final snackBar = SnackBar(
+                      content: Text(
+                        '${shoesSnap['name']}をカートに追加しました！',
+                      ),
+                    );
+                    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                    shoesCartList.add(shoesSnap.data());
+                    print(shoesCartList);
+                    print(shoesCartList.length);
+                  },
                 ),
               ],
             ),

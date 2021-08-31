@@ -1,6 +1,6 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:shopping_cart/HomScreen.dart';
+import 'package:shopping_cart/Screens/HomScreen.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();

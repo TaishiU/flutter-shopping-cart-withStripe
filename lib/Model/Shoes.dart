@@ -17,7 +17,7 @@ class Shoes {
 
   factory Shoes.fromDoc(DocumentSnapshot doc) {
     return Shoes(
-      id: doc.id,
+      id: doc['id'],
       image: doc['image'],
       name: doc['name'],
       price: doc['price'],
