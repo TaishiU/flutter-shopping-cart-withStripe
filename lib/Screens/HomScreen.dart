@@ -96,9 +96,6 @@ class _HomScreenState extends State<HomScreen> {
               return GridView.count(
                 shrinkWrap: true,
                 physics: NeverScrollableScrollPhysics(),
-                // physics: BouncingScrollPhysics(
-                //   parent: AlwaysScrollableScrollPhysics(),
-                // ),
                 crossAxisCount: 2,
                 mainAxisSpacing: 8,
                 crossAxisSpacing: 8,
