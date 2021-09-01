@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:shopping_cart/Constants/Constants.dart';
 import 'package:shopping_cart/Screens/PaymentScreen.dart';
 
@@ -71,87 +72,93 @@ class _HomScreenState extends State<HomScreen> {
                         PaymentScreen(shoesCartList: shoesCartList),
                   ),
                 );
-                print(shoesCartList);
-                print(shoesCartList.length);
               },
             ),
           ),
         ],
       ),
-      body: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 10),
-        child: StreamBuilder<QuerySnapshot>(
-          stream: nikeRef.snapshots(),
-          builder:
-              (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
-            if (!snapshot.hasData) {
-              return Center(
-                child: CircularProgressIndicator(),
-              );
-            }
-            List<DocumentSnapshot> nikeShoes = snapshot.data!.docs;
-            return GridView.count(
-              shrinkWrap: true,
-              physics: BouncingScrollPhysics(
-                  parent: AlwaysScrollableScrollPhysics()),
-              crossAxisCount: 2,
-              mainAxisSpacing: 8,
-              crossAxisSpacing: 8,
-              childAspectRatio: (itemWidth / itemHeight),
-              children: nikeShoes.map((shoesSnap) {
-                //final alreadyBuy = shoesCartList.contains(shoesSnap.data());
-
-                return Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Container(
-                      height: 120,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(19),
-                        image: DecorationImage(
-                          image: NetworkImage(shoesSnap['image']),
-                          fit: BoxFit.cover,
-                        ),
-                      ),
-                    ),
-                    Text(
-                      shoesSnap['name'],
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    Text(
-                      shoesSnap['gender'],
-                      style: TextStyle(
-                        fontSize: 13,
-                        color: Colors.grey,
-                      ),
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text('¥ ${shoesSnap['price']}'),
-                        IconButton(
-                          icon: Icon(Icons.shopping_cart_outlined),
-                          color: Colors.orange,
-                          onPressed: () {
-                            final snackBar = SnackBar(
-                              content: Text(
-                                '${shoesSnap['name']}をカートに追加しました！',
-                              ),
-                            );
-                            ScaffoldMessenger.of(context)
-                                .showSnackBar(snackBar);
-                            shoesCartList.add(shoesSnap.data());
-                          },
-                        ),
-                      ],
-                    ),
-                  ],
+      body: SingleChildScrollView(
+        physics: BouncingScrollPhysics(
+          parent: AlwaysScrollableScrollPhysics(),
+        ),
+        child: Padding(
+          padding: EdgeInsets.symmetric(horizontal: 10),
+          child: StreamBuilder<QuerySnapshot>(
+            stream: nikeRef.snapshots(),
+            builder:
+                (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+              if (!snapshot.hasData) {
+                return Center(
+                  child: CircularProgressIndicator(),
                 );
-              }).toList(),
-            );
-          },
+              }
+              List<DocumentSnapshot> nikeShoes = snapshot.data!.docs;
+              return GridView.count(
+                shrinkWrap: true,
+                physics: NeverScrollableScrollPhysics(),
+                // physics: BouncingScrollPhysics(
+                //   parent: AlwaysScrollableScrollPhysics(),
+                // ),
+                crossAxisCount: 2,
+                mainAxisSpacing: 8,
+                crossAxisSpacing: 8,
+                childAspectRatio: (itemWidth / itemHeight),
+                children: nikeShoes.map((shoesSnap) {
+                  //final alreadyBuy = shoesCartList.contains(shoesSnap.data());
+                  final formatter = NumberFormat('#,###');
+                  var price = formatter.format(shoesSnap['price']);
+                  return Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Container(
+                        height: 120,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(19),
+                          image: DecorationImage(
+                            image: NetworkImage(shoesSnap['image']),
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                      ),
+                      Text(
+                        shoesSnap['name'],
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      Text(
+                        shoesSnap['gender'],
+                        style: TextStyle(
+                          fontSize: 13,
+                          color: Colors.grey,
+                        ),
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text('¥$price'),
+                          IconButton(
+                            icon: Icon(Icons.shopping_cart_outlined),
+                            color: Colors.orange,
+                            onPressed: () {
+                              // final snackBar = SnackBar(
+                              //   content: Text(
+                              //     '${shoesSnap['name']}をカートに追加しました！',
+                              //   ),
+                              // );
+                              // ScaffoldMessenger.of(context)
+                              //     .showSnackBar(snackBar);
+                              shoesCartList.add(shoesSnap.data());
+                            },
+                          ),
+                        ],
+                      ),
+                    ],
+                  );
+                }).toList(),
+              );
+            },
+          ),
         ),
       ),
     );
