@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:intl/intl.dart';
+import 'package:shopping_cart/PaymentService/PaymentService.dart';
+import 'package:stripe_payment/stripe_payment.dart';
 
 class PaymentScreen extends StatefulWidget {
   List shoesCartList;
@@ -10,12 +13,11 @@ class PaymentScreen extends StatefulWidget {
 }
 
 class _PaymentScreenState extends State<PaymentScreen> {
-  int subTotalPrice = 0;
-  double tax = 0.0;
-  double totalPrice = 0;
-  late String subTotalResult;
-  late String taxResult;
-  late String totalResult;
+  int tax = 0;
+  int subTotalPrice = 0; /* Pay用 */
+  int totalPrice = 0; /* Pay用 */
+  late String subTotalResult; /* 表示用 */
+  late String totalResult; /* 表示用 */
 
   @override
   void initState() {
@@ -23,22 +25,38 @@ class _PaymentScreenState extends State<PaymentScreen> {
 
     for (var shoes in widget.shoesCartList) {
       subTotalPrice += shoes['price'] as int;
-      tax = subTotalPrice * 0.1;
-      totalPrice = subTotalPrice + tax;
+      if (subTotalPrice < 15000) {
+        /*小計が15,000円未満であれば配送手数料550円がかかる*/
+        tax = 550;
+        totalPrice = subTotalPrice + tax;
+      } else {
+        /*小計が15,000円以上であれば配送手数料円がかかる*/
+        tax = 0;
+        totalPrice = subTotalPrice + tax;
+      }
     }
     final formatter = NumberFormat('#,###');
     subTotalResult = formatter.format(subTotalPrice);
-    taxResult = formatter.format(tax);
     totalResult = formatter.format(totalPrice);
+
+    StripePayment.setOptions(
+      StripeOptions(publishableKey: dotenv.env['PUBLISHABLEKEY']),
+    );
   }
 
   calculatePrice({shoes}) {
     subTotalPrice -= shoes['price'] as int;
-    tax = subTotalPrice * 0.1;
-    totalPrice = subTotalPrice + tax;
+    if (subTotalPrice < 15000) {
+      /*小計が15,000円未満であれば配送手数料550円がかかる*/
+      tax = 550;
+      totalPrice = subTotalPrice + tax;
+    } else {
+      /*小計が15,000円以上であれば配送手数料は無料*/
+      tax = 0;
+      totalPrice = subTotalPrice + tax;
+    }
     final formatter = NumberFormat('#,###');
     subTotalResult = formatter.format(subTotalPrice);
-    taxResult = formatter.format(tax);
     totalResult = formatter.format(totalPrice);
   }
 
@@ -60,9 +78,6 @@ class _PaymentScreenState extends State<PaymentScreen> {
         ),
       ),
       body: SingleChildScrollView(
-        // physics: BouncingScrollPhysics(
-        //   parent: AlwaysScrollableScrollPhysics(),
-        // ),
         child: Column(
           children: [
             Container(
@@ -70,9 +85,6 @@ class _PaymentScreenState extends State<PaymentScreen> {
               child: ListView(
                 shrinkWrap: true,
                 physics: NeverScrollableScrollPhysics(),
-                // physics: BouncingScrollPhysics(
-                //   parent: AlwaysScrollableScrollPhysics(),
-                // ),
                 children: widget.shoesCartList.map((shoes) {
                   final formatter = NumberFormat('#,###');
                   var price = formatter.format(shoes['price']);
@@ -83,7 +95,6 @@ class _PaymentScreenState extends State<PaymentScreen> {
                       key: UniqueKey(),
                       direction: DismissDirection.endToStart,
                       onDismissed: (direction) {
-                        // widget.shoesCartList.remove(shoes);
                         widget.shoesCartList
                             .removeWhere((removeShoes) => removeShoes == shoes);
                         setState(() {
@@ -164,7 +175,6 @@ class _PaymentScreenState extends State<PaymentScreen> {
                 }).toList(),
               ),
             ),
-            SizedBox(height: 40),
             widget.shoesCartList.length == 0
                 ? Column(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -190,6 +200,34 @@ class _PaymentScreenState extends State<PaymentScreen> {
                     child: Container(
                       child: Column(
                         children: [
+                          totalPrice < 15000
+                              ? Container(
+                                  padding: EdgeInsets.all(5),
+                                  decoration: BoxDecoration(
+                                    border: Border(
+                                      left: BorderSide(
+                                        color: Colors.grey,
+                                        width: 1,
+                                      ),
+                                      top: BorderSide(
+                                        color: Colors.grey,
+                                        width: 1,
+                                      ),
+                                      right: BorderSide(
+                                        color: Colors.grey,
+                                        width: 1,
+                                      ),
+                                      bottom: BorderSide(
+                                        color: Colors.grey,
+                                        width: 1,
+                                      ),
+                                    ),
+                                  ),
+                                  child: Text(
+                                      '*15,000円（税込）未満のご注文には、\n配送手数料550円がかかります。'),
+                                )
+                              : SizedBox.shrink(),
+                          SizedBox(height: 40),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
@@ -207,9 +245,9 @@ class _PaymentScreenState extends State<PaymentScreen> {
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Text('税金:'),
+                              Text('配送手数料:'),
                               Text(
-                                '¥$taxResult',
+                                '¥$tax',
                                 style: TextStyle(
                                   fontSize: 20,
                                   fontWeight: FontWeight.bold,
@@ -265,7 +303,16 @@ class _PaymentScreenState extends State<PaymentScreen> {
                                   borderRadius: BorderRadius.circular(20),
                                 ),
                               ),
-                              onPressed: () {},
+                              onPressed: () async {
+                                final bool isSuccess = await PaymentService()
+                                    .paymentForStripe(amountPrice: totalPrice);
+                                if (isSuccess == true) {
+                                  print('決済成功！🔥');
+                                  print('決済金額は$totalResult円です');
+                                } else {
+                                  print('決済失敗...');
+                                }
+                              },
                             ),
                           ),
                         ],
