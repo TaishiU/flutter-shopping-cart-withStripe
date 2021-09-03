@@ -4,39 +4,15 @@ import 'package:intl/intl.dart';
 import 'package:shopping_cart/Constants/Constants.dart';
 import 'package:shopping_cart/Screens/PaymentScreen.dart';
 
-class HomScreen extends StatefulWidget {
-  const HomScreen({Key? key}) : super(key: key);
+class HomeScreen extends StatefulWidget {
+  const HomeScreen({Key? key}) : super(key: key);
 
   @override
-  _HomScreenState createState() => _HomScreenState();
+  _HomeScreenState createState() => _HomeScreenState();
 }
 
-class _HomScreenState extends State<HomScreen> {
+class _HomeScreenState extends State<HomeScreen> {
   final List shoesCartList = []; /*カートに入れた商品リスト*/
-
-  // Map group = {
-  //   0: {
-  //     'brand': 'Nike',
-  //     'logo':
-  //         'https://freepngimg.com/thumb/nike_logo/6-2-nike-logo-free-png-image-thumb.png'
-  //   },
-  //   1: {
-  //     'brand': 'Adidas',
-  //     'logo':
-  //         'https://upload.wikimedia.org/wikipedia/commons/2/24/Adidas_logo.png'
-  //   },
-  //   2: {
-  //     'brand': 'Puma',
-  //     'logo': 'http://assets.stickpng.com/images/580b57fcd9996e24bc43c4f8.png'
-  //   },
-  //   3: {
-  //     'brand': 'New Balance',
-  //     'logo':
-  //         'https://logos-world.net/wp-content/uploads/2020/09/New-Balance-Logo-1972-2006.png'
-  //   },
-  // };
-  //
-  // int selectedIndex = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -53,6 +29,7 @@ class _HomScreenState extends State<HomScreen> {
         title: Text(
           'Shoes',
           style: TextStyle(
+            fontWeight: FontWeight.bold,
             color: Colors.black,
           ),
         ),

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:intl/intl.dart';
 import 'package:shopping_cart/PaymentService/PaymentService.dart';
+import 'package:shopping_cart/Screens/SuccessPayScreen.dart';
 import 'package:stripe_payment/stripe_payment.dart';
 
 class PaymentScreen extends StatefulWidget {
@@ -71,8 +72,9 @@ class _PaymentScreenState extends State<PaymentScreen> {
           color: Colors.black,
         ),
         title: Text(
-          'Shopping Cart',
+          'カート',
           style: TextStyle(
+            fontWeight: FontWeight.bold,
             color: Colors.black,
           ),
         ),
@@ -187,7 +189,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
                       ),
                       SizedBox(height: 20),
                       Text(
-                        'カートにアイテムがありません',
+                        'アイテムがありません...',
                         style: TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.bold,
@@ -206,19 +208,19 @@ class _PaymentScreenState extends State<PaymentScreen> {
                                   decoration: BoxDecoration(
                                     border: Border(
                                       left: BorderSide(
-                                        color: Colors.grey,
+                                        color: Colors.grey.shade400,
                                         width: 1,
                                       ),
                                       top: BorderSide(
-                                        color: Colors.grey,
+                                        color: Colors.grey.shade400,
                                         width: 1,
                                       ),
                                       right: BorderSide(
-                                        color: Colors.grey,
+                                        color: Colors.grey.shade400,
                                         width: 1,
                                       ),
                                       bottom: BorderSide(
-                                        color: Colors.grey,
+                                        color: Colors.grey.shade400,
                                         width: 1,
                                       ),
                                     ),
@@ -307,6 +309,13 @@ class _PaymentScreenState extends State<PaymentScreen> {
                                 final bool isSuccess = await PaymentService()
                                     .paymentForStripe(amountPrice: totalPrice);
                                 if (isSuccess == true) {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => SuccessPayScreen(
+                                          totalResult: totalResult),
+                                    ),
+                                  );
                                   print('決済成功！🔥');
                                   print('決済金額は$totalResult円です');
                                 } else {
