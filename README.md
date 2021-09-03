@@ -1,8 +1,9 @@
 # shopping_cart
 
-![652BD293-393C-40F9-9D3D-DA064A06AF65_1_105_c](https://user-images.githubusercontent.com/73986840/131960544-a324b8b8-bc7a-4bd4-bc23-c2d0f54e2cff.jpeg)<br>
-![ADA7CC11-31E0-4F3F-8F00-693595B882A0_1_105_c](https://user-images.githubusercontent.com/73986840/131960644-68bc090d-efdf-4e21-93d4-ae8f54964ebb.jpeg)<br>
-![1F9FC7CE-8D7B-4115-A31B-58AF9F153D39_1_105_c](https://user-images.githubusercontent.com/73986840/131960674-40612038-0ad3-4933-ac28-6ab33dd67123.jpeg)<br>
+![5B95DA9D-6A3D-4DFA-A1D8-7B64AFB9D473_1_105_c](https://user-images.githubusercontent.com/73986840/131963896-3c2e253e-6e2c-49c5-968a-2070caa836c9.jpeg)<br>
+
+## Platform
+![80DFE9FC-54D3-478F-AFE3-C2CF5FFE9F40_1_105_c](https://user-images.githubusercontent.com/73986840/131964209-cec031d5-24e9-4392-8241-87683107fd28.jpeg)<br>
 
 ## Getting Started
 
