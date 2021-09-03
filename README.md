@@ -2,6 +2,10 @@
 
 ![5B95DA9D-6A3D-4DFA-A1D8-7B64AFB9D473_1_105_c](https://user-images.githubusercontent.com/73986840/131963896-3c2e253e-6e2c-49c5-968a-2070caa836c9.jpeg)<br>
 
+## Stripe Dashboard
+![1C6AF12D-5630-4003-8B8C-EE10EC6C19E5_1_105_c](https://user-images.githubusercontent.com/73986840/131965185-bb231e06-d8b7-4746-9bfc-8c6ec0f42f78.jpeg)<br>
+
+
 ## Platform
 ![80DFE9FC-54D3-478F-AFE3-C2CF5FFE9F40_1_105_c](https://user-images.githubusercontent.com/73986840/131964209-cec031d5-24e9-4392-8241-87683107fd28.jpeg)<br>
 
