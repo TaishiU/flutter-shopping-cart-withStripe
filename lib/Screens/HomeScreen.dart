@@ -78,7 +78,6 @@ class _HomeScreenState extends State<HomeScreen> {
                 crossAxisSpacing: 8,
                 childAspectRatio: (itemWidth / itemHeight),
                 children: nikeShoes.map((shoesSnap) {
-                  //final alreadyBuy = shoesCartList.contains(shoesSnap.data());
                   final formatter = NumberFormat('#,###');
                   var price = formatter.format(shoesSnap['price']);
                   return Column(
@@ -115,13 +114,6 @@ class _HomeScreenState extends State<HomeScreen> {
                             icon: Icon(Icons.shopping_cart_outlined),
                             color: Colors.orange,
                             onPressed: () {
-                              // final snackBar = SnackBar(
-                              //   content: Text(
-                              //     '${shoesSnap['name']}をカートに追加しました！',
-                              //   ),
-                              // );
-                              // ScaffoldMessenger.of(context)
-                              //     .showSnackBar(snackBar);
                               shoesCartList.add(shoesSnap.data());
                             },
                           ),

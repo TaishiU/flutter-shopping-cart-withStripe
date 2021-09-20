@@ -14,7 +14,6 @@ class SuccessPayScreen extends StatelessWidget {
           Center(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
-              //crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Stack(
                   alignment: Alignment.center,
@@ -44,7 +43,6 @@ class SuccessPayScreen extends StatelessWidget {
                 ),
                 SizedBox(height: 100),
                 Container(
-                  //color: Colors.red,
                   width: MediaQuery.of(context).size.width * 0.7,
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
