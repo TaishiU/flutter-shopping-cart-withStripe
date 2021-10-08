@@ -125,7 +125,6 @@ class _PaymentScreenState extends State<PaymentScreen> {
                                   height: 80,
                                   width: 80,
                                   decoration: BoxDecoration(
-                                    color: Colors.red,
                                     borderRadius: BorderRadius.circular(20),
                                     image: DecorationImage(
                                       image: NetworkImage(shoes['image']),
@@ -238,7 +237,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
                                 '¥$subTotalResult',
                                 style: TextStyle(
                                   fontSize: 20,
-                                  fontWeight: FontWeight.bold,
+                                  //fontWeight: FontWeight.bold,
                                 ),
                               ),
                             ],
@@ -252,18 +251,12 @@ class _PaymentScreenState extends State<PaymentScreen> {
                                 '¥$tax',
                                 style: TextStyle(
                                   fontSize: 20,
-                                  fontWeight: FontWeight.bold,
+                                  //fontWeight: FontWeight.bold,
                                 ),
                               ),
                             ],
                           ),
                           SizedBox(height: 15),
-                          Text(
-                            '- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -',
-                            style: TextStyle(
-                              color: Colors.grey,
-                            ),
-                          ),
                           SizedBox(height: 15),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
