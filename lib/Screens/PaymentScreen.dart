@@ -161,12 +161,19 @@ class _PaymentScreenState extends State<PaymentScreen> {
                                 ),
                               ],
                             ),
-                            Padding(
-                              padding: EdgeInsets.only(right: 20),
-                              child: Icon(
+                            IconButton(
+                              icon: Icon(
                                 Icons.shopping_cart,
                                 color: Colors.orange,
                               ),
+                              onPressed: () {
+                                widget.shoesCartList.removeWhere(
+                                    (removeShoes) => removeShoes == shoes);
+                                setState(() {
+                                  widget.shoesCartList = widget.shoesCartList;
+                                });
+                                calculatePrice(shoes: shoes);
+                              },
                             ),
                           ],
                         ),
