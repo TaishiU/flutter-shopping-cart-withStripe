@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:shopping_cart/Screens/HomeScreen.dart';
+import 'package:shopping_cart/main.dart';
 
 class SuccessPayScreen extends StatelessWidget {
   final String totalResult;
@@ -98,7 +98,7 @@ class SuccessPayScreen extends StatelessWidget {
                     Navigator.pushAndRemoveUntil(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => HomeScreen(),
+                          builder: (context) => MyApp(),
                         ),
                         (_) => false);
                   },

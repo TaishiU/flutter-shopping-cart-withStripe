@@ -2,10 +2,15 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:shopping_cart/Constants/Constants.dart';
+import 'package:shopping_cart/Firebase/Auth.dart';
 import 'package:shopping_cart/Screens/PaymentScreen.dart';
 
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({Key? key}) : super(key: key);
+  final String currentUserId;
+  HomeScreen({
+    Key? key,
+    required this.currentUserId,
+  }) : super(key: key);
 
   @override
   _HomeScreenState createState() => _HomeScreenState();
@@ -26,6 +31,16 @@ class _HomeScreenState extends State<HomeScreen> {
       appBar: AppBar(
         backgroundColor: Colors.white,
         elevation: 0,
+        centerTitle: true,
+        leading: IconButton(
+          icon: Icon(
+            Icons.logout,
+            color: Colors.black,
+          ),
+          onPressed: () {
+            Auth().logout();
+          },
+        ),
         title: Text(
           'Shoes',
           style: TextStyle(
