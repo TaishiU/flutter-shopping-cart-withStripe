@@ -18,6 +18,7 @@ class ChatScreen extends StatefulWidget {
 
 class _ChatScreenState extends State<ChatScreen> {
   TextEditingController textEditingController = TextEditingController();
+  FocusNode _focusNode = FocusNode();
   String chatText = '';
 
   @override
@@ -114,6 +115,7 @@ class _ChatScreenState extends State<ChatScreen> {
                             chatText = input;
                           });
                         },
+                        focusNode: _focusNode,
                       ),
                     ),
                     GestureDetector(
@@ -123,6 +125,7 @@ class _ChatScreenState extends State<ChatScreen> {
                           chatText: chatText,
                         );
                         textEditingController.clear();
+                        _focusNode.unfocus();
                       },
                       child: Icon(
                         Icons.send_rounded,
