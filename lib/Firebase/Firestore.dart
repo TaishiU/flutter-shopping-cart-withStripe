@@ -13,4 +13,24 @@ class Firestore {
       'email': email,
     });
   }
+
+  /*チャット関連*/
+  Future<void> addChat({
+    required String currentUserId,
+    required String chatText,
+  }) async {
+    DocumentReference chatReference = chatsRef.doc();
+    await chatReference.set({
+      'chatId': chatReference.id,
+      'userId': currentUserId,
+      'text': chatText,
+      'timestamp': Timestamp.fromDate(DateTime.now()),
+    });
+  }
+
+  Future<void> deleteChat({
+    required String chatId,
+  }) async {
+    await chatsRef.doc(chatId).delete();
+  }
 }

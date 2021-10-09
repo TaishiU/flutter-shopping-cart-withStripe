@@ -2,7 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:shopping_cart/Screens/HomeScreen.dart';
+import 'package:shopping_cart/Screens/FeedScreen.dart';
 import 'package:shopping_cart/Screens/LoginScreen.dart';
 
 Future<void> main() async {
@@ -29,7 +29,7 @@ class MyApp extends StatelessWidget {
         stream: FirebaseAuth.instance.authStateChanges(),
         builder: (BuildContext context, snapshot) {
           if (snapshot.hasData) {
-            return HomeScreen();
+            return FeedScreen(currentUserId: snapshot.data!.uid);
           } else {
             return LoginScreen();
           }

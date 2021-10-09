@@ -6,7 +6,11 @@ import 'package:shopping_cart/Firebase/Auth.dart';
 import 'package:shopping_cart/Screens/PaymentScreen.dart';
 
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({Key? key}) : super(key: key);
+  final String currentUserId;
+  HomeScreen({
+    Key? key,
+    required this.currentUserId,
+  }) : super(key: key);
 
   @override
   _HomeScreenState createState() => _HomeScreenState();
@@ -126,7 +130,6 @@ class _HomeScreenState extends State<HomeScreen> {
                             color: Colors.orange,
                             onPressed: () {
                               shoesCartList.add(shoesSnap.data());
-                              print(shoesCartList);
                             },
                           ),
                         ],
