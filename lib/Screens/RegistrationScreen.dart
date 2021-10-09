@@ -1,22 +1,23 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:shopping_cart/Firebase/Auth.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:shopping_cart/Firebase/Firestore.dart';
+import 'package:shopping_cart/Riverpod.dart';
 import 'package:shopping_cart/main.dart';
 
-class RegistrationScreen extends StatefulWidget {
-  const RegistrationScreen({Key? key}) : super(key: key);
+class RegistrationScreen extends HookWidget {
+  RegistrationScreen({Key? key}) : super(key: key);
 
-  @override
-  _RegistrationScreenState createState() => _RegistrationScreenState();
-}
-
-class _RegistrationScreenState extends State<RegistrationScreen> {
+  /*buildの外に出すことでエラーを防ぐ*/
   final _formkey = GlobalKey<FormState>();
-  late String _email;
-  late String _password;
-  bool _isObscure = true;
 
   @override
   Widget build(BuildContext context) {
+    final _email = useProvider(emailProvider).state;
+    final _password = useProvider(passwordProvider).state;
+    final _isObscure = useProvider(isObscureProvider);
+
     return Scaffold(
       body: SingleChildScrollView(
         child: SafeArea(
@@ -55,7 +56,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                         border: InputBorder.none,
                       ),
                       onChanged: (value) {
-                        _email = value;
+                        context.read(emailProvider).state = value;
                       },
                       keyboardType: TextInputType.emailAddress,
                       validator: (String? input) {
@@ -96,14 +97,14 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                                 : Icons.visibility,
                           ),
                           onPressed: () {
-                            setState(() {
-                              _isObscure = !_isObscure;
-                            });
+                            context
+                                .read(isObscureProvider.notifier)
+                                .update(!_isObscure);
                           },
                         ),
                       ),
                       onChanged: (value) {
-                        _password = value;
+                        context.read(passwordProvider).state = value;
                       },
                       keyboardType: TextInputType.visiblePassword,
                       validator: (String? input) {
@@ -137,24 +138,36 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                       onPressed: () async {
                         _formkey.currentState!.save();
                         if (_formkey.currentState!.validate()) {
-                          bool isValid = await Auth().signUp(
-                            email: _email,
-                            password: _password,
-                          );
-                          if (isValid) {
+                          try {
+                            final _auth = FirebaseAuth.instance;
+                            final authResult =
+                                await _auth.createUserWithEmailAndPassword(
+                              email: _email,
+                              password: _password,
+                            );
+
+                            /*ユーザーIDを更新*/
+                            context.read(userIdProvider).state =
+                                authResult.user!.uid;
+
+                            Firestore().registerUser(
+                              userId: authResult.user!.uid,
+                              email: _email,
+                            );
+
                             Navigator.pushReplacement(
                               context,
                               MaterialPageRoute(
                                 builder: (context) => MyApp(),
                               ),
                             );
-                          } else {
+                          } catch (e) {
                             showDialog(
                               context: context,
                               builder: (BuildContext context) {
                                 return AlertDialog(
                                   title: Text('Error'),
-                                  content: Text('Please sign up again.'),
+                                  content: Text(e.toString()),
                                   actions: [
                                     TextButton(
                                       child: Text(
@@ -175,7 +188,6 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                                 );
                               },
                             );
-                            print('Login problem');
                           }
                         }
                       },
