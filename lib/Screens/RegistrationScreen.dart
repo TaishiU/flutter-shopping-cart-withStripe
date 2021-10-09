@@ -147,7 +147,7 @@ class RegistrationScreen extends HookWidget {
                             );
 
                             /*ユーザーIDを更新*/
-                            context.read(userIdProvider).state =
+                            context.read(currentUserIdProvider).state =
                                 authResult.user!.uid;
 
                             Firestore().registerUser(

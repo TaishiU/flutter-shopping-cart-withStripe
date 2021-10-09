@@ -1,18 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:shopping_cart/Firebase/Firestore.dart';
 import 'package:shopping_cart/Model/Chat.dart';
+import 'package:shopping_cart/Riverpod.dart';
 
-class ChatContainer extends StatelessWidget {
-  final String currentUserId;
+class ChatContainer extends HookWidget {
   final Chat chat;
   ChatContainer({
     Key? key,
-    required this.currentUserId,
     required this.chat,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final String currentUserId = useProvider(currentUserIdProvider).state;
+
     if (chat.userId == currentUserId) {
       /*ユーザー自身のメッセージは右側に表示*/
       return Row(

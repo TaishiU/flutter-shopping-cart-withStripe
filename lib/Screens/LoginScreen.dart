@@ -43,6 +43,7 @@ class LoginScreen extends HookWidget {
                       color: Colors.grey.shade100,
                     ),
                     child: TextFormField(
+                      autofocus: true,
                       decoration: InputDecoration(
                         contentPadding: EdgeInsets.symmetric(
                           horizontal: 10,

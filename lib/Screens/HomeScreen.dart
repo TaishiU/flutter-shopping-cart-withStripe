@@ -1,27 +1,18 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:intl/intl.dart';
 import 'package:shopping_cart/Constants/Constants.dart';
 import 'package:shopping_cart/Firebase/Auth.dart';
 import 'package:shopping_cart/Screens/PaymentScreen.dart';
 
-class HomeScreen extends StatefulWidget {
-  final String currentUserId;
-  HomeScreen({
-    Key? key,
-    required this.currentUserId,
-  }) : super(key: key);
-
-  @override
-  _HomeScreenState createState() => _HomeScreenState();
-}
-
-class _HomeScreenState extends State<HomeScreen> {
-  final List shoesCartList = []; /*カートに入れた商品リスト*/
+class HomeScreen extends HookWidget {
+  HomeScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    // // アスペクト比を計算する
+    final List shoesCartList = []; /*カートに入れた商品リスト*/
+    /*アスペクト比を計算する*/
     var size = MediaQuery.of(context).size;
     final double itemHeight = (size.height - kToolbarHeight - 320) / 2;
     final double itemWidth = size.width / 2;

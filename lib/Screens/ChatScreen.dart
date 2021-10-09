@@ -1,27 +1,29 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:shopping_cart/Firebase/Auth.dart';
 import 'package:shopping_cart/Firebase/Firestore.dart';
 import 'package:shopping_cart/Model/Chat.dart';
+import 'package:shopping_cart/Riverpod.dart';
 import 'package:shopping_cart/Widget/ChatContainer.dart';
 
-class ChatScreen extends StatefulWidget {
-  final String currentUserId;
+class ChatScreen extends HookWidget {
   ChatScreen({
     Key? key,
-    required this.currentUserId,
   }) : super(key: key);
 
   @override
-  _ChatScreenState createState() => _ChatScreenState();
-}
-
-class _ChatScreenState extends State<ChatScreen> {
-  TextEditingController textEditingController = TextEditingController();
-  String chatText = '';
-
-  @override
   Widget build(BuildContext context) {
+    final String currentUserId = useProvider(currentUserIdProvider).state;
+    final String chatText = useProvider(chatTextProvider).state;
+    // TextEditingController textEditingController = TextEditingController();
+    FocusNode _focusNode = FocusNode();
+
+    // useEffect(() {
+    //   _focusNode = FocusNode();
+    // }, []);
+
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -69,7 +71,6 @@ class _ChatScreenState extends State<ChatScreen> {
                 children: documents.map((document) {
                   Chat chat = Chat.fromDoc(document);
                   return ChatContainer(
-                    currentUserId: widget.currentUserId,
                     chat: chat,
                   );
                 }).toList(),
@@ -102,27 +103,33 @@ class _ChatScreenState extends State<ChatScreen> {
                         borderRadius: BorderRadius.circular(20),
                       ),
                       child: TextFormField(
-                        controller: textEditingController,
+                        // controller: textEditingController,
                         keyboardType: TextInputType.multiline,
                         maxLines: null,
                         decoration: InputDecoration(
                           contentPadding: EdgeInsets.only(left: 12, bottom: 11),
                           border: InputBorder.none,
                         ),
-                        onChanged: (input) {
-                          setState(() {
-                            chatText = input;
-                          });
+                        onChanged: (value) {
+                          context.read(chatTextProvider).state = value;
                         },
+                        validator: (String? input) {
+                          if (input!.isEmpty) {
+                            return 'Enter your Email';
+                          }
+                          return null;
+                        },
+                        focusNode: _focusNode,
                       ),
                     ),
                     GestureDetector(
                       onTap: () {
                         Firestore().addChat(
-                          currentUserId: widget.currentUserId,
+                          currentUserId: currentUserId,
                           chatText: chatText,
                         );
-                        textEditingController.clear();
+                        //textEditingController.clear();
+                        _focusNode.unfocus();
                       },
                       child: Icon(
                         Icons.send_rounded,

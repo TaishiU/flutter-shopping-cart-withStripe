@@ -7,7 +7,10 @@ import 'package:stripe_payment/stripe_payment.dart';
 
 class PaymentScreen extends StatefulWidget {
   List shoesCartList;
-  PaymentScreen({Key? key, required this.shoesCartList}) : super(key: key);
+  PaymentScreen({
+    Key? key,
+    required this.shoesCartList,
+  }) : super(key: key);
 
   @override
   _PaymentScreenState createState() => _PaymentScreenState();

@@ -1,37 +1,29 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:shopping_cart/Riverpod.dart';
 import 'package:shopping_cart/Screens/ChatScreen.dart';
 import 'package:shopping_cart/Screens/HomeScreen.dart';
 
-class FeedScreen extends StatefulWidget {
-  final String currentUserId;
-  const FeedScreen({
-    Key? key,
-    required this.currentUserId,
-  }) : super(key: key);
-
-  @override
-  _FeedScreenState createState() => _FeedScreenState();
-}
-
-class _FeedScreenState extends State<FeedScreen> {
-  int _selectedTab = 0;
+class FeedScreen extends HookWidget {
+  const FeedScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final bottomTab = useProvider(bottomTabProvider);
+
     return Scaffold(
       body: [
-        HomeScreen(currentUserId: widget.currentUserId),
-        ChatScreen(currentUserId: widget.currentUserId),
-      ].elementAt(_selectedTab),
+        HomeScreen(),
+        ChatScreen(),
+      ].elementAt(bottomTab),
       bottomNavigationBar: CupertinoTabBar(
         onTap: (index) {
-          setState(() {
-            _selectedTab = index;
-          });
+          context.read(bottomTabProvider.notifier).update(index);
         },
         activeColor: Colors.blue,
-        currentIndex: _selectedTab,
+        currentIndex: bottomTab,
         items: [
           BottomNavigationBarItem(icon: Icon(Icons.home)),
           BottomNavigationBarItem(icon: Icon(Icons.chat)),
