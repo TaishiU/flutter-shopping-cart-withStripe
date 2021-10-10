@@ -2,24 +2,29 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:shopping_cart/Firebase/Auth.dart';
 import 'package:shopping_cart/Firebase/Firestore.dart';
-import 'package:shopping_cart/Model/Chat.dart';
-import 'package:shopping_cart/Widget/ChatContainer.dart';
 
-class ChatScreen extends StatefulWidget {
+class MessageScreen extends StatefulWidget {
+  final String convoId;
   final String currentUserId;
-  ChatScreen({
+  final String currentUserName;
+  final String peerUserId;
+
+  MessageScreen({
     Key? key,
+    required this.convoId,
     required this.currentUserId,
+    required this.currentUserName,
+    required this.peerUserId,
   }) : super(key: key);
 
   @override
-  _ChatScreenState createState() => _ChatScreenState();
+  _MessageScreenState createState() => _MessageScreenState();
 }
 
-class _ChatScreenState extends State<ChatScreen> {
+class _MessageScreenState extends State<MessageScreen> {
+  late String chatText;
   TextEditingController textEditingController = TextEditingController();
   FocusNode _focusNode = FocusNode();
-  String chatText = '';
 
   @override
   Widget build(BuildContext context) {
@@ -29,8 +34,11 @@ class _ChatScreenState extends State<ChatScreen> {
         backgroundColor: Colors.white,
         elevation: 0,
         centerTitle: true,
+        leading: BackButton(
+          color: Colors.black,
+        ),
         title: Text(
-          'Chat',
+          'Message',
           style: TextStyle(
             fontWeight: FontWeight.bold,
             color: Colors.black,
@@ -68,11 +76,12 @@ class _ChatScreenState extends State<ChatScreen> {
                   parent: AlwaysScrollableScrollPhysics(),
                 ),
                 children: documents.map((document) {
-                  Chat chat = Chat.fromDoc(document);
-                  return ChatContainer(
-                    currentUserId: widget.currentUserId,
-                    chat: chat,
-                  );
+                  //Chat chat = Chat.fromDoc(document);
+                  // return ChatContainer(
+                  //   currentUserId: widget.currentUserId,
+                  //   chat: chat,
+                  // );
+                  return Container();
                 }).toList(),
               );
             },
@@ -121,7 +130,10 @@ class _ChatScreenState extends State<ChatScreen> {
                     GestureDetector(
                       onTap: () {
                         Firestore().addChat(
+                          convoId: widget.convoId,
                           currentUserId: widget.currentUserId,
+                          currentUserName: widget.currentUserName,
+                          peerUserId: widget.peerUserId,
                           chatText: chatText,
                         );
                         textEditingController.clear();

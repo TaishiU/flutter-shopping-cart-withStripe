@@ -1,20 +1,33 @@
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:shopping_cart/Firebase/Auth.dart';
-import 'package:shopping_cart/Screens/RegistrationScreen.dart';
 import 'package:shopping_cart/main.dart';
 
-class LoginScreen extends StatefulWidget {
-  const LoginScreen({Key? key}) : super(key: key);
+class RegistrationScreen extends StatefulWidget {
+  const RegistrationScreen({Key? key}) : super(key: key);
 
   @override
-  _LoginScreenState createState() => _LoginScreenState();
+  _RegistrationScreenState createState() => _RegistrationScreenState();
 }
 
-class _LoginScreenState extends State<LoginScreen> {
+class _RegistrationScreenState extends State<RegistrationScreen> {
   final _formkey = GlobalKey<FormState>();
+  late String _name;
   late String _email;
   late String _password;
   bool _isObscure = true;
+  FirebaseMessaging fcm = FirebaseMessaging.instance;
+  String? fcmToken;
+
+  @override
+  void initState() {
+    super.initState();
+
+    fcm.getToken().then((String? token) {
+      fcmToken = token;
+      print('fcmToken: $fcmToken');
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -29,13 +42,45 @@ class _LoginScreenState extends State<LoginScreen> {
                 children: [
                   SizedBox(height: 100),
                   Text(
-                    'Welcome👋',
+                    'New account☘️',
                     style: TextStyle(
                       color: Colors.black,
                       fontSize: 30,
                     ),
                   ),
                   SizedBox(height: 100),
+                  Container(
+                    height: 60,
+                    width: MediaQuery.of(context).size.width,
+                    decoration: BoxDecoration(
+                      color: Colors.grey.shade100,
+                    ),
+                    child: TextFormField(
+                      decoration: InputDecoration(
+                        contentPadding: EdgeInsets.symmetric(
+                          horizontal: 10,
+                          vertical: 20,
+                        ),
+                        hintText: 'Name',
+                        hintStyle: TextStyle(
+                          color: Colors.grey,
+                          fontWeight: FontWeight.w400,
+                        ),
+                        border: InputBorder.none,
+                      ),
+                      onChanged: (value) {
+                        _name = value;
+                      },
+                      keyboardType: TextInputType.emailAddress,
+                      validator: (String? input) {
+                        if (input!.isEmpty) {
+                          return 'Enter your name';
+                        }
+                        return null;
+                      },
+                    ),
+                  ),
+                  SizedBox(height: 10),
                   Container(
                     height: 60,
                     width: MediaQuery.of(context).size.width,
@@ -121,7 +166,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     width: MediaQuery.of(context).size.width,
                     child: ElevatedButton(
                       child: Text(
-                        'Login',
+                        'Create account',
                         style: TextStyle(
                           color: Colors.white,
                           fontSize: 23,
@@ -138,9 +183,11 @@ class _LoginScreenState extends State<LoginScreen> {
                       onPressed: () async {
                         _formkey.currentState!.save();
                         if (_formkey.currentState!.validate()) {
-                          bool isValid = await Auth().login(
+                          bool isValid = await Auth().signUp(
+                            name: _name,
                             email: _email,
                             password: _password,
+                            fcmToken: fcmToken,
                           );
                           if (isValid) {
                             Navigator.pushReplacement(
@@ -155,7 +202,7 @@ class _LoginScreenState extends State<LoginScreen> {
                               builder: (BuildContext context) {
                                 return AlertDialog(
                                   title: Text('Error'),
-                                  content: Text('Please log in again.'),
+                                  content: Text('Please sign up again.'),
                                   actions: [
                                     TextButton(
                                       child: Text(
@@ -182,35 +229,29 @@ class _LoginScreenState extends State<LoginScreen> {
                       },
                     ),
                   ),
-                  SizedBox(height: 10),
-                  Container(
-                    height: 60,
-                    width: MediaQuery.of(context).size.width,
-                    child: OutlinedButton(
-                      child: Text(
-                        'Create account',
-                        style: TextStyle(
-                          color: Colors.black,
-                          fontSize: 23,
-                          fontWeight: FontWeight.normal,
-                        ),
+                  SizedBox(height: 100),
+                  ElevatedButton(
+                    child: Padding(
+                      padding: EdgeInsets.all(10),
+                      child: Icon(
+                        Icons.chevron_left,
+                        size: 30,
                       ),
-                      style: OutlinedButton.styleFrom(
-                        primary: Colors.black,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        side: BorderSide(),
-                      ),
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => RegistrationScreen(),
-                          ),
-                        );
-                      },
                     ),
+                    style: ElevatedButton.styleFrom(
+                      primary: Colors.white,
+                      onPrimary: Colors.black,
+                      shape: const CircleBorder(
+                        side: BorderSide(
+                          color: Colors.black,
+                          width: 1,
+                          style: BorderStyle.solid,
+                        ),
+                      ),
+                    ),
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
                   ),
                 ],
               ),

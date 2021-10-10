@@ -3,7 +3,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:shopping_cart/Screens/FeedScreen.dart';
-import 'package:shopping_cart/Screens/LoginScreen.dart';
+import 'package:shopping_cart/Screens/Login/LoginScreen.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();

@@ -13,7 +13,7 @@ class ChatContainer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (chat.userId == currentUserId) {
+    if (chat.senderId == currentUserId) {
       /*ユーザー自身のメッセージは右側に表示*/
       return Row(
         mainAxisAlignment: MainAxisAlignment.end,
@@ -87,7 +87,7 @@ class ChatContainer extends StatelessWidget {
           ),
         ],
       );
-    } else if (chat.userId != currentUserId) {
+    } else if (chat.senderId != currentUserId) {
       /*相手ユーザーのメッセージは左側に表示*/
       return Row(
         crossAxisAlignment: CrossAxisAlignment.start,

@@ -26,6 +26,8 @@ class _HomeScreenState extends State<HomeScreen> {
     final double itemHeight = (size.height - kToolbarHeight - 320) / 2;
     final double itemWidth = size.width / 2;
 
+    print('currentUserId: ${widget.currentUserId}');
+
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(

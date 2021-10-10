@@ -1,32 +1,20 @@
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:shopping_cart/Firebase/Auth.dart';
+import 'package:shopping_cart/Screens/Login/RegistrationScreen.dart';
 import 'package:shopping_cart/main.dart';
 
-class RegistrationScreen extends StatefulWidget {
-  const RegistrationScreen({Key? key}) : super(key: key);
+class LoginScreen extends StatefulWidget {
+  const LoginScreen({Key? key}) : super(key: key);
 
   @override
-  _RegistrationScreenState createState() => _RegistrationScreenState();
+  _LoginScreenState createState() => _LoginScreenState();
 }
 
-class _RegistrationScreenState extends State<RegistrationScreen> {
+class _LoginScreenState extends State<LoginScreen> {
   final _formkey = GlobalKey<FormState>();
   late String _email;
   late String _password;
   bool _isObscure = true;
-  FirebaseMessaging fcm = FirebaseMessaging.instance;
-  String? fcmToken;
-
-  @override
-  void initState() {
-    super.initState();
-
-    fcm.getToken().then((String? token) {
-      fcmToken = token;
-      print('fcmToken: $fcmToken');
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -41,7 +29,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                 children: [
                   SizedBox(height: 100),
                   Text(
-                    'New account☘️',
+                    'Welcome👋',
                     style: TextStyle(
                       color: Colors.black,
                       fontSize: 30,
@@ -133,7 +121,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                     width: MediaQuery.of(context).size.width,
                     child: ElevatedButton(
                       child: Text(
-                        'Create account',
+                        'Login',
                         style: TextStyle(
                           color: Colors.white,
                           fontSize: 23,
@@ -150,10 +138,9 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                       onPressed: () async {
                         _formkey.currentState!.save();
                         if (_formkey.currentState!.validate()) {
-                          bool isValid = await Auth().signUp(
+                          bool isValid = await Auth().login(
                             email: _email,
                             password: _password,
-                            fcmToken: fcmToken,
                           );
                           if (isValid) {
                             Navigator.pushReplacement(
@@ -168,7 +155,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                               builder: (BuildContext context) {
                                 return AlertDialog(
                                   title: Text('Error'),
-                                  content: Text('Please sign up again.'),
+                                  content: Text('Please log in again.'),
                                   actions: [
                                     TextButton(
                                       child: Text(
@@ -195,29 +182,35 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                       },
                     ),
                   ),
-                  SizedBox(height: 100),
-                  ElevatedButton(
-                    child: Padding(
-                      padding: EdgeInsets.all(10),
-                      child: Icon(
-                        Icons.chevron_left,
-                        size: 30,
-                      ),
-                    ),
-                    style: ElevatedButton.styleFrom(
-                      primary: Colors.white,
-                      onPrimary: Colors.black,
-                      shape: const CircleBorder(
-                        side: BorderSide(
+                  SizedBox(height: 10),
+                  Container(
+                    height: 60,
+                    width: MediaQuery.of(context).size.width,
+                    child: OutlinedButton(
+                      child: Text(
+                        'Create account',
+                        style: TextStyle(
                           color: Colors.black,
-                          width: 1,
-                          style: BorderStyle.solid,
+                          fontSize: 23,
+                          fontWeight: FontWeight.normal,
                         ),
                       ),
+                      style: OutlinedButton.styleFrom(
+                        primary: Colors.black,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        side: BorderSide(),
+                      ),
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => RegistrationScreen(),
+                          ),
+                        );
+                      },
                     ),
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
                   ),
                 ],
               ),

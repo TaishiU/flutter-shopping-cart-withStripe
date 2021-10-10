@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:shopping_cart/Screens/ChatScreen.dart';
+import 'package:shopping_cart/Screens/Chat/ChatScreen.dart';
 import 'package:shopping_cart/Screens/HomeScreen.dart';
 
 class FeedScreen extends StatefulWidget {

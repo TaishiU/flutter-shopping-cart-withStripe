@@ -5,6 +5,7 @@ class Auth {
   final _auth = FirebaseAuth.instance;
 
   Future<bool> signUp({
+    required String name,
     required String email,
     required String password,
     required String? fcmToken,
@@ -20,6 +21,7 @@ class Auth {
       if (signedInUser != null) {
         Firestore().registerUser(
           userId: signedInUser.uid,
+          name: name,
           email: email,
           fcmToken: fcmToken,
         );
