@@ -13,16 +13,13 @@ class ChatScreen extends HookWidget {
     Key? key,
   }) : super(key: key);
 
+  final TextEditingController textEditingController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     final String currentUserId = useProvider(currentUserIdProvider).state;
     final String chatText = useProvider(chatTextProvider).state;
-    // TextEditingController textEditingController = TextEditingController();
     FocusNode _focusNode = FocusNode();
-
-    // useEffect(() {
-    //   _focusNode = FocusNode();
-    // }, []);
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -103,7 +100,7 @@ class ChatScreen extends HookWidget {
                         borderRadius: BorderRadius.circular(20),
                       ),
                       child: TextFormField(
-                        // controller: textEditingController,
+                        controller: textEditingController,
                         keyboardType: TextInputType.multiline,
                         maxLines: null,
                         decoration: InputDecoration(
@@ -128,7 +125,8 @@ class ChatScreen extends HookWidget {
                           currentUserId: currentUserId,
                           chatText: chatText,
                         );
-                        //textEditingController.clear();
+
+                        textEditingController.clear();
                         _focusNode.unfocus();
                       },
                       child: Icon(
