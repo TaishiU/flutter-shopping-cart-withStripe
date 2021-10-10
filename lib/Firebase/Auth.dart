@@ -7,6 +7,7 @@ class Auth {
   Future<bool> signUp({
     required String email,
     required String password,
+    required String? fcmToken,
   }) async {
     try {
       final authResult = await _auth.createUserWithEmailAndPassword(
@@ -20,6 +21,7 @@ class Auth {
         Firestore().registerUser(
           userId: signedInUser.uid,
           email: email,
+          fcmToken: fcmToken,
         );
         return true;
       }

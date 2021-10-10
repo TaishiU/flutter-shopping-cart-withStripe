@@ -6,11 +6,13 @@ class Firestore {
   Future<void> registerUser({
     required String userId,
     required String email,
+    required String? fcmToken,
   }) async {
     DocumentReference usersReference = usersRef.doc(userId);
     await usersReference.set({
       'userId': usersReference.id,
       'email': email,
+      'fcmToken': fcmToken,
     });
   }
 
