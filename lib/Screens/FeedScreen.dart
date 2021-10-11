@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:shopping_cart/Screens/Chat/ChatScreen.dart';
+import 'package:shopping_cart/Screens/Chat/MessageScreen.dart';
 import 'package:shopping_cart/Screens/HomeScreen.dart';
 
 class FeedScreen extends StatefulWidget {
@@ -22,7 +22,7 @@ class _FeedScreenState extends State<FeedScreen> {
     return Scaffold(
       body: [
         HomeScreen(currentUserId: widget.currentUserId),
-        ChatScreen(currentUserId: widget.currentUserId),
+        MessageScreen(currentUserId: widget.currentUserId),
       ].elementAt(_selectedTab),
       bottomNavigationBar: CupertinoTabBar(
         onTap: (index) {

@@ -47,7 +47,8 @@ class Firestore {
 
   Future<void> deleteChat({
     required String chatId,
+    required String convoId,
   }) async {
-    await chatsRef.doc(chatId).delete();
+    await chatsRef.doc(convoId).collection('message').doc(chatId).delete();
   }
 }

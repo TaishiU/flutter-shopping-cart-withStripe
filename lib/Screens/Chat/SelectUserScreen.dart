@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:shopping_cart/Constants/Constants.dart';
 import 'package:shopping_cart/Firebase/Firestore.dart';
 import 'package:shopping_cart/Model/User.dart';
-import 'package:shopping_cart/Screens/Chat/MessageScreen.dart';
+import 'package:shopping_cart/Screens/Chat/ChatScreen.dart';
 import 'package:shopping_cart/Utils/HelperFunctions.dart';
 
 class SelectUserScreen extends StatefulWidget {
@@ -69,7 +69,7 @@ class _SelectUserScreenState extends State<SelectUserScreen> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => MessageScreen(
+                        builder: (context) => ChatScreen(
                           convoId: convoId,
                           currentUserId: widget.currentUserId,
                           currentUserName: currentUser.name,

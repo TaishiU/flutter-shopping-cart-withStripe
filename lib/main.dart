@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:shopping_cart/Screens/FeedScreen.dart';
 import 'package:shopping_cart/Screens/Login/LoginScreen.dart';
 
@@ -11,6 +12,17 @@ Future<void> main() async {
   await dotenv.load(fileName: ".env");
   runApp(MyApp());
 }
+
+final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+    FlutterLocalNotificationsPlugin();
+
+const AndroidNotificationChannel channel = AndroidNotificationChannel(
+  'high_importance_channel', // id
+  'High Importance Notifications', // title
+  description:
+      'This channel is used for important notifications.', // description
+  importance: Importance.high,
+);
 
 class MyApp extends StatelessWidget {
   @override

@@ -53,7 +53,10 @@ class ChatContainer extends StatelessWidget {
                           primary: Colors.red,
                         ),
                         onPressed: () {
-                          Firestore().deleteChat(chatId: chat.chatId);
+                          Firestore().deleteChat(
+                            chatId: chat.chatId,
+                            convoId: chat.convoId,
+                          );
                           Navigator.pop(context);
                         },
                       ),
