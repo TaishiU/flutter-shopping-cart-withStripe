@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:shopping_cart/Constants/Constants.dart';
+import 'package:shopping_cart/Model/User.dart';
 
 class Firestore {
   /*プロフィール関連*/
@@ -27,8 +28,7 @@ class Firestore {
 
   Future<void> addChat({
     required String convoId,
-    required String currentUserId,
-    required String currentUserName,
+    required User currentUser,
     required String peerUserId,
     required String chatText,
   }) async {
@@ -37,8 +37,9 @@ class Firestore {
     await chatReference.set({
       'chatId': chatReference.id,
       'text': chatText,
-      'senderId': currentUserId,
-      'senderName': currentUserName,
+      'senderId': currentUser.userId,
+      'senderName': currentUser.name,
+      'senderProfileImage': currentUser.profileImage,
       'receiverId': peerUserId,
       'convoId': convoId,
       'timestamp': Timestamp.fromDate(DateTime.now()),

@@ -71,8 +71,7 @@ class _SelectUserScreenState extends State<SelectUserScreen> {
                       MaterialPageRoute(
                         builder: (context) => ChatScreen(
                           convoId: convoId,
-                          currentUserId: widget.currentUserId,
-                          currentUserName: currentUser.name,
+                          currentUser: currentUser,
                           peerUserId: peerUser.userId,
                         ),
                       ),
@@ -80,15 +79,24 @@ class _SelectUserScreenState extends State<SelectUserScreen> {
                   },
                   child: Container(
                     color: Colors.yellow,
-                    child: Center(
-                      child: Padding(
-                        padding: EdgeInsets.all(10),
-                        child: Text(
-                          peerUser.name,
-                          style: TextStyle(
-                            fontSize: 30,
+                    child: Padding(
+                      padding: EdgeInsets.all(10),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          CircleAvatar(
+                            radius: 23,
+                            backgroundImage:
+                                NetworkImage(peerUser.profileImage),
                           ),
-                        ),
+                          SizedBox(width: 30),
+                          Text(
+                            peerUser.name,
+                            style: TextStyle(
+                              fontSize: 30,
+                            ),
+                          ),
+                        ],
                       ),
                     ),
                   ),

@@ -3,19 +3,18 @@ import 'package:flutter/material.dart';
 import 'package:shopping_cart/Firebase/Auth.dart';
 import 'package:shopping_cart/Firebase/Firestore.dart';
 import 'package:shopping_cart/Model/Chat.dart';
+import 'package:shopping_cart/Model/User.dart';
 import 'package:shopping_cart/Widget/ChatContainer.dart';
 
 class ChatScreen extends StatefulWidget {
   final String convoId;
-  final String currentUserId;
-  final String currentUserName;
+  final User currentUser;
   final String peerUserId;
 
   ChatScreen({
     Key? key,
     required this.convoId,
-    required this.currentUserId,
-    required this.currentUserName,
+    required this.currentUser,
     required this.peerUserId,
   }) : super(key: key);
 
@@ -82,7 +81,7 @@ class _ChatScreenState extends State<ChatScreen> {
                 children: documents.map((document) {
                   Chat chat = Chat.fromDoc(document);
                   return ChatContainer(
-                    currentUserId: widget.currentUserId,
+                    currentUserId: widget.currentUser.userId,
                     chat: chat,
                   );
                 }).toList(),
@@ -134,8 +133,7 @@ class _ChatScreenState extends State<ChatScreen> {
                       onTap: () {
                         Firestore().addChat(
                           convoId: widget.convoId,
-                          currentUserId: widget.currentUserId,
-                          currentUserName: widget.currentUserName,
+                          currentUser: widget.currentUser,
                           peerUserId: widget.peerUserId,
                           chatText: chatText,
                         );

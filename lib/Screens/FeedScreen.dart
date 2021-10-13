@@ -21,6 +21,7 @@ class _FeedScreenState extends State<FeedScreen> {
   int _selectedTab = 0;
   final FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance;
 
+  /*getToken()メソッドを必ず実行しないとプッシュ通知が送れない*/
   _getToken() {
     _firebaseMessaging.getToken().then((deviceToken) {
       print('device token: $deviceToken');
@@ -36,6 +37,8 @@ class _FeedScreenState extends State<FeedScreen> {
       print("フォアグラウンドでメッセージを受け取りました");
       RemoteNotification? notification = message.notification;
       AndroidNotification? android = message.notification!.android;
+      print('messageData: ${message.data}');
+      print('message.senderId: ${message.senderId}');
 
       if (notification != null && android != null) {
         flutterLocalNotificationsPlugin.show(
