@@ -9,13 +9,13 @@ import 'package:shopping_cart/Widget/ChatContainer.dart';
 class ChatScreen extends StatefulWidget {
   final String convoId;
   final User currentUser;
-  final String peerUserId;
+  final User peerUser;
 
   ChatScreen({
     Key? key,
     required this.convoId,
     required this.currentUser,
-    required this.peerUserId,
+    required this.peerUser,
   }) : super(key: key);
 
   @override
@@ -38,12 +38,21 @@ class _ChatScreenState extends State<ChatScreen> {
         leading: BackButton(
           color: Colors.black,
         ),
-        title: Text(
-          'Chat',
-          style: TextStyle(
-            fontWeight: FontWeight.bold,
-            color: Colors.black,
-          ),
+        title: Row(
+          children: [
+            CircleAvatar(
+              radius: 20,
+              backgroundImage: NetworkImage(widget.peerUser.profileImage),
+            ),
+            SizedBox(width: 10),
+            Text(
+              widget.peerUser.name,
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                color: Colors.black,
+              ),
+            ),
+          ],
         ),
         actions: [
           IconButton(
@@ -134,7 +143,7 @@ class _ChatScreenState extends State<ChatScreen> {
                         Firestore().addChat(
                           convoId: widget.convoId,
                           currentUser: widget.currentUser,
-                          peerUserId: widget.peerUserId,
+                          peerUserId: widget.peerUser.userId,
                           chatText: chatText,
                         );
                         textEditingController.clear();

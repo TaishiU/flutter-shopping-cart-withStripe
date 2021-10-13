@@ -72,7 +72,7 @@ class _SelectUserScreenState extends State<SelectUserScreen> {
                         builder: (context) => ChatScreen(
                           convoId: convoId,
                           currentUser: currentUser,
-                          peerUserId: peerUser.userId,
+                          peerUser: peerUser,
                         ),
                       ),
                     );
