@@ -87,6 +87,7 @@ class _ChatScreenState extends State<ChatScreen> {
                 physics: BouncingScrollPhysics(
                   parent: AlwaysScrollableScrollPhysics(),
                 ),
+                // reverse: true,
                 children: documents.map((document) {
                   Chat chat = Chat.fromDoc(document);
                   return ChatContainer(
