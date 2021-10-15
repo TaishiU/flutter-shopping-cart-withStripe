@@ -113,7 +113,8 @@ class _FeedScreenState extends State<FeedScreen> {
               channel.id,
               channel.name,
               channelDescription: channel.description,
-              icon: 'launch_background',
+              //icon: 'launch_background',
+              icon: 'shopping_cart',
             ),
           ),
         );
