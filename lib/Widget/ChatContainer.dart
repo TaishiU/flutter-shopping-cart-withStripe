@@ -19,7 +19,7 @@ class ChatContainer extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
           GestureDetector(
-            onLongPress: () {
+            onTap: () {
               /*長押しでメッセージ削除のアラートを出す*/
               showDialog(
                 context: context,

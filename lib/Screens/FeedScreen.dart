@@ -41,11 +41,11 @@ class _FeedScreenState extends State<FeedScreen> {
   }) async {
     /*ユーザー自身のプロフィール*/
     DocumentSnapshot userProfileDoc =
-        await Firestore().getUserProfile(userId: widget.currentUserId);
+        await Firestore().getUserProfile(userId: currentUserId);
     User currentUser = User.fromDoc(userProfileDoc);
     /*相手ユーザーのプロフィール*/
     DocumentSnapshot peerUserProfileDoc =
-        await Firestore().getUserProfile(userId: widget.currentUserId);
+        await Firestore().getUserProfile(userId: peerUserId);
     User peerUser = User.fromDoc(peerUserProfileDoc);
     Navigator.push(
       context,
@@ -64,19 +64,44 @@ class _FeedScreenState extends State<FeedScreen> {
     super.initState();
     _getToken();
 
+    //ターミネイト用
+    FirebaseMessaging.instance
+        .getInitialMessage()
+        .then((RemoteMessage? message) {
+      if (message != null) {
+        print("ターミネイトでメッセージを受け取りました！");
+        Map<String, dynamic> data = message.data;
+        String _convoId = jsonDecode(data['convoId']);
+        String _senderId = jsonDecode(data['senderId']);
+        String _receiverId = jsonDecode(data['receiverId']);
+        String _senderProfileImage = jsonDecode(data['senderProfileImage']);
+        print('convoId: $_convoId');
+        print('senderId: $_senderId');
+        print('receiverId: $_receiverId');
+
+        if (_senderId == widget.currentUserId) {
+          getProfileAndNavigate(
+            convoId: _convoId,
+            currentUserId: _senderId,
+            peerUserId: _receiverId,
+          );
+          print('ChatScreenに遷移しました！');
+        } else if (_senderId != widget.currentUserId) {
+          getProfileAndNavigate(
+            convoId: _convoId,
+            currentUserId: _receiverId,
+            peerUserId: _senderId,
+          );
+          print('ChatScreenに遷移しました...');
+        }
+      }
+    });
+
+    //フォアグラウンド用
     FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-      print("フォアグラウンドでメッセージを受け取りました");
+      print("フォアグラウンドでメッセージを受け取りました！");
       RemoteNotification? notification = message.notification;
       AndroidNotification? android = message.notification!.android;
-      Map<String, dynamic> data = message.data;
-      String _convoId = jsonDecode(data['convoId']);
-      String _senderId = jsonDecode(data['senderId']);
-      String _receiverId = jsonDecode(data['receiverId']);
-      String _senderProfileImage = jsonDecode(data['senderProfileImage']);
-      print('senderProfileImage: $_senderProfileImage');
-      print('convoId: $_convoId');
-      print('senderId: $_senderId');
-      print('receiverId: $_receiverId');
 
       if (notification != null && android != null) {
         flutterLocalNotificationsPlugin.show(
@@ -92,21 +117,34 @@ class _FeedScreenState extends State<FeedScreen> {
             ),
           ),
         );
+      }
+    });
 
-        if (_senderId == widget.currentUserId) {
-          getProfileAndNavigate(
-            convoId: _convoId,
-            currentUserId: _senderId,
-            peerUserId: _receiverId,
-          );
-          print('ChatScreenに遷移しました！');
-        } else if (_senderId != widget.currentUserId) {
-          getProfileAndNavigate(
-            convoId: _convoId,
-            currentUserId: _receiverId,
-            peerUserId: _senderId,
-          );
-        }
+    /*バックグラウンド用*/
+    FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
+      print("バックグラウンドでメッセージを受け取りました！");
+      Map<String, dynamic> data = message.data;
+      String _convoId = jsonDecode(data['convoId']);
+      String _senderId = jsonDecode(data['senderId']);
+      String _receiverId = jsonDecode(data['receiverId']);
+      print('convoId: $_convoId');
+      print('senderId: $_senderId');
+      print('receiverId: $_receiverId');
+
+      if (_senderId == widget.currentUserId) {
+        getProfileAndNavigate(
+          convoId: _convoId,
+          currentUserId: _senderId,
+          peerUserId: _receiverId,
+        );
+        print('ChatScreenに遷移しました！');
+      } else if (_senderId != widget.currentUserId) {
+        getProfileAndNavigate(
+          convoId: _convoId,
+          currentUserId: _receiverId,
+          peerUserId: _senderId,
+        );
+        print('ChatScreenに遷移しました...');
       }
     });
   }

@@ -10,20 +10,20 @@ import 'package:shopping_cart/Screens/Login/LoginScreen.dart';
 /*バックグラウンド用*/
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   await Firebase.initializeApp();
-  print('バックグラウンドでメッセージを受け取りました！');
 }
 
-/*フォアグラウンド用*/
-final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
-    FlutterLocalNotificationsPlugin();
-
+/*Android用の通知チャネル設定*/
 const AndroidNotificationChannel channel = AndroidNotificationChannel(
   'high_importance_channel', // id
   'High Importance Notifications', // title
   description:
       'This channel is used for important notifications.', // description
-  importance: Importance.high,
+  importance: Importance.max,
 );
+
+/*Androidのフォアグラウンド用(グローバルに宣言可)*/
+final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+    FlutterLocalNotificationsPlugin();
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -32,6 +32,19 @@ Future<void> main() async {
 
   /*バックグラウンド用*/
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
+
+  /*Androidの通知チャネル設定の実装*/
+  await flutterLocalNotificationsPlugin
+      .resolvePlatformSpecificImplementation<
+          AndroidFlutterLocalNotificationsPlugin>()
+      ?.createNotificationChannel(channel);
+
+  /*iosのフォアグラウンド用通知アクションの設定*/
+  await FirebaseMessaging.instance.setForegroundNotificationPresentationOptions(
+    alert: true,
+    badge: true,
+    sound: true,
+  );
 
   runApp(MyApp());
 }
