@@ -100,6 +100,7 @@ class _FeedScreenState extends State<FeedScreen> {
     //フォアグラウンド用
     FirebaseMessaging.onMessage.listen((RemoteMessage message) {
       print("フォアグラウンドでメッセージを受け取りました！");
+      Map<String, dynamic> data = message.data;
       RemoteNotification? notification = message.notification;
       AndroidNotification? android = message.notification!.android;
 
@@ -113,8 +114,14 @@ class _FeedScreenState extends State<FeedScreen> {
               channel.id,
               channel.name,
               channelDescription: channel.description,
-              //icon: 'launch_background',
+              /*「android/app/src/main/AndroidManifest.xml」に記述*/
+              /*「android/app/src/main/res/drawable」にpng画像を配置*/
               icon: 'shopping_cart',
+              importance: Importance.max,
+              /*通知の右側にアイコンが出る*/
+              largeIcon: DrawableResourceAndroidBitmap('shopping_cart'),
+              //largeIcon: data['senderProfileImage'],
+              //largeIcon: FilePathAndroidBitmap('assets/images/shopping_cart'),
             ),
           ),
         );

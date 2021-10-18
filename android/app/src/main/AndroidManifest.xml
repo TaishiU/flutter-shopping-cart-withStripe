@@ -1,15 +1,18 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.shopping_cart">
    <application
-        android:label="shopping_cart"
-        android:icon="@mipmap/launcher_icon">
-        <activity
+       android:allowBackup="false"
+       android:name="io.flutter.app.FlutterApplication"
+       android:label="shopping_cart"
+       android:icon="@drawable/shopping_cart">    <!-- アプリアイコン -->
+       <activity
             android:name=".MainActivity"
             android:launchMode="singleTop"
             android:theme="@style/LaunchTheme"
             android:configChanges="orientation|keyboardHidden|keyboard|screenSize|smallestScreenSize|locale|layoutDirection|fontScale|screenLayout|density|uiMode"
             android:hardwareAccelerated="true"
-            android:windowSoftInputMode="adjustResize">
+            android:windowSoftInputMode="adjustResize"
+            >
             <!-- Specifies an Android theme to apply to this Activity as soon as
                  the Android process has started. This theme is visible to the user
                  while the Flutter UI initializes. After that, this theme continues
@@ -18,20 +21,21 @@
               android:name="io.flutter.embedding.android.NormalTheme"
               android:resource="@style/NormalTheme"
               />
-            <!-- Displays an Android View that continues showing the launch screen
-                 Drawable until Flutter paints its first frame, then this splash
-                 screen fades out. A splash screen is useful to avoid any visual
-                 gap between the end of Android's launch screen and the painting of
-                 Flutter's first frame. -->
+            <!--スプラッシュ画面 -->
+           <meta-data
+               android:name="io.flutter.embedding.android.SplashScreenDrawable"
+               android:resource="@drawable/launch_background"
+               />
+            <!-- プッシュ通知 -->
             <meta-data
-              android:name="io.flutter.embedding.android.SplashScreenDrawable"
-              android:resource="@drawable/shopping_cart"
-              />
+                android:name="com.google.firebase.messaging.default_notification_icon"
+                android:resource="@drawable/launch_background"
+                />
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
-            <!-- 以下、プッシュ通知用 -->
+            <!-- プッシュ通知クリックアクション -->
             <intent-filter>
                 <action android:name="FLUTTER_NOTIFICATION_CLICK" />
                 <category android:name="android.intent.category.DEFAULT" />
