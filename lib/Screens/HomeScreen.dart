@@ -4,7 +4,6 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:intl/intl.dart';
 import 'package:shopping_cart/Constants/Constants.dart';
 import 'package:shopping_cart/Firebase/Auth.dart';
-import 'package:shopping_cart/Screens/PaymentScreen.dart';
 
 class HomeScreen extends HookWidget {
   HomeScreen({Key? key}) : super(key: key);
@@ -48,13 +47,13 @@ class HomeScreen extends HookWidget {
                 color: Colors.orange,
               ),
               onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) =>
-                        PaymentScreen(shoesCartList: shoesCartList),
-                  ),
-                );
+                // Navigator.push(
+                //   context,
+                //   MaterialPageRoute(
+                //     builder: (context) =>
+                //         PaymentScreen(shoesCartList: shoesCartList),
+                //   ),
+                // );
               },
             ),
           ),
