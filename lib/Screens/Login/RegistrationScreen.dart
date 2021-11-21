@@ -19,12 +19,16 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
   FirebaseMessaging fcm = FirebaseMessaging.instance;
   String? fcmToken;
 
-  @override
-  void initState() async {
-    super.initState();
-
+  getFcmToken() async {
     fcmToken = await FirebaseMessaging.instance.getToken();
     print('fcmToken: $fcmToken');
+  }
+
+  @override
+  void initState() {
+    super.initState();
+
+    getFcmToken();
   }
 
   @override
